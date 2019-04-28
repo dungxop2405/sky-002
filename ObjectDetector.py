@@ -46,7 +46,7 @@ class Detector:
 
                 cv.rectangle(img, (xLeftBottom, yLeftBottom), (xRightTop, yRightTop),
                              (0, 0, 255))
-                if class_id in classNames:
+                if class_id == 1:
                     label = classNames[class_id] + ": " + str(confidence)
                     labelSize, baseLine = cv.getTextSize(label, cv.FONT_HERSHEY_SIMPLEX, 0.5, 1)
                     yLeftBottom = max(yLeftBottom, labelSize[1])
