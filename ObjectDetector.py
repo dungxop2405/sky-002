@@ -55,6 +55,6 @@ class Detector:
                     yLeftBottom = max(yLeftBottom, labelSize[1])
                     cv.putText(img, label, (xLeftBottom+5, yLeftBottom), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
 
-        #img = cv.imencode('.jpg', img)[1].tobytes()
+        img = cv.imencode('.jpg', img)[1].tobytes()
         image = base64.encodestring(img).decode('ascii')
         return {"img": image, "countPerson": countPerson}
