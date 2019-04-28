@@ -1,7 +1,7 @@
 from ObjectDetector import Detector
 import io
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 from PIL import Image
 from flask import send_file
@@ -24,7 +24,8 @@ def upload():
     if request.method == 'POST':
         file = Image.open(request.files['file'].stream)
         img = detector.detectObject(file)
-        return send_file(io.BytesIO(img),attachment_filename='image.jpg',mimetype='image/jpg')
+        return jsonify(img)
+        #return send_file(io.BytesIO(img["img"]),attachment_filename='image.jpg',mimetype='image/jpg')
 
 
 if __name__ == "__main__":

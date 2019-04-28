@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy
-
+import base64
+import json
 
 classNames = {0: 'background',
               1: 'person', 2: 'bicycle', 3: 'car', 4: 'motorcycle', 5: 'airplane', 6: 'bus',
@@ -28,6 +29,7 @@ class Detector:
                                              'model/ssd_mobilenet_v1_coco_2017_11_17.pbtxt')
 
     def detectObject(self, imName):
+        countPerson = 0
         img = cv.cvtColor(numpy.array(imName), cv.COLOR_BGR2RGB)
         cvNet.setInput(cv.dnn.blobFromImage(img, 0.007843, (300, 300), (127.5, 127.5, 127.5), swapRB=True, crop=False))
         detections = cvNet.forward()
@@ -47,10 +49,12 @@ class Detector:
                 cv.rectangle(img, (xLeftBottom, yLeftBottom), (xRightTop, yRightTop),
                              (0, 0, 255))
                 if class_id == 1:
+                    countPerson = countPerson + 1
                     label = classNames[class_id] + ": " + str(confidence)
                     labelSize, baseLine = cv.getTextSize(label, cv.FONT_HERSHEY_SIMPLEX, 0.5, 1)
                     yLeftBottom = max(yLeftBottom, labelSize[1])
                     cv.putText(img, label, (xLeftBottom+5, yLeftBottom), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
 
-        img = cv.imencode('.jpg', img)[1].tobytes()
-        return img
+        #img = cv.imencode('.jpg', img)[1].tobytes()
+        image = base64.encodestring(img).decode('ascii')
+        return {"img": image, "countPerson": countPerson}
